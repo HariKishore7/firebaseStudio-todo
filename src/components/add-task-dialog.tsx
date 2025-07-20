@@ -15,6 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -27,12 +28,14 @@ const taskSchema = z.object({
   description: z.string().optional(),
 });
 
+type TaskFormValues = z.infer<typeof taskSchema>;
+
 export default function AddTaskDialog() {
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof taskSchema>>({
+  const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
       title: '',
@@ -40,13 +43,7 @@ export default function AddTaskDialog() {
     },
   });
 
-  const handleOpenChange = (isOpen: boolean) => {
-    if (!isSubmitting) {
-      setOpen(isOpen);
-    }
-  };
-
-  const onSubmit = async (values: z.infer<typeof taskSchema>) => {
+  const onSubmit = async (values: TaskFormValues) => {
     setIsSubmitting(true);
     try {
       await addDoc(collection(db, 'tasks'), {
@@ -55,11 +52,11 @@ export default function AddTaskDialog() {
         createdAt: serverTimestamp(),
       });
       
+      form.reset();
       toast({
         title: 'Success!',
         description: 'Your new task has been added.',
       });
-      form.reset();
       setOpen(false);
     } catch (error) {
       console.error('Error adding task: ', error);
@@ -69,9 +66,20 @@ export default function AddTaskDialog() {
         variant: 'destructive',
       });
     } finally {
+      // This will run even if the dialog is closed, ensuring the state is always reset for the next time it opens.
       setIsSubmitting(false);
     }
   };
+  
+  const handleOpenChange = (isOpen: boolean) => {
+    if (isSubmitting) {
+      return;
+    }
+    if (!isOpen) {
+        form.reset();
+    }
+    setOpen(isOpen);
+  }
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -86,7 +94,7 @@ export default function AddTaskDialog() {
           <DialogTitle>Add a new task</DialogTitle>
           <DialogDescription>
             What do you need to get done? Fill in the details below.
-          </Description>
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
@@ -117,7 +125,7 @@ export default function AddTaskDialog() {
               )}
             />
             <DialogFooter>
-              <Button type="submit" disabled={isSubmitting}>
+               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Add Task
               </Button>
