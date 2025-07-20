@@ -53,6 +53,7 @@ export default function AddTaskDialog() {
         description: 'Your new task has been added.',
       });
       form.reset();
+      setIsSubmitting(false);
       setOpen(false);
     } catch (error) {
       console.error('Error adding task: ', error);
@@ -61,7 +62,6 @@ export default function AddTaskDialog() {
         description: 'Failed to add task. Please try again.',
         variant: 'destructive',
       });
-    } finally {
       setIsSubmitting(false);
     }
   };
