@@ -116,7 +116,7 @@ export default function Home() {
       <main className="container mx-auto p-4 md:p-8">
         <header className="flex flex-wrap items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-primary font-headline">TaskMaster</h1>
+            <h1 className="text-4xl font-bold text-primary font-headline">Task Prioritizer</h1>
             <p className="text-muted-foreground">Your intelligent to-do list.</p>
           </div>
           <div className="flex items-center gap-2">
@@ -154,7 +154,7 @@ export default function Home() {
         </Card>
       </main>
       <footer className="text-center p-4 text-muted-foreground text-sm">
-        Built with Next.js, Firebase, and Genkit AI.
+        Built with Next.js, TypeScript, Firebase, and Genkit AI.
       </footer>
     </div>
   );
