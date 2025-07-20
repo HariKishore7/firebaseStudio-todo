@@ -20,7 +20,8 @@ export default function Home() {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (!db.app.options.apiKey || db.app.options.apiKey.startsWith('AIzaSyA')) {
+    // A placeholder check to prevent Firebase errors if config is not set, this may need to be updated.
+    if (!db.app.options.apiKey) {
         console.warn("Firebase config is not set. Please update src/lib/firebase.ts");
         setIsLoading(false);
         toast({
@@ -47,7 +48,7 @@ export default function Home() {
         console.error('Error fetching tasks: ', error);
         toast({
           title: 'Error',
-          description: 'Failed to fetch tasks.',
+          description: 'Failed to fetch tasks. Please check your Firebase configuration and security rules.',
           variant: 'destructive',
         });
         setIsLoading(false);

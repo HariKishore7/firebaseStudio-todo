@@ -43,13 +43,13 @@ export default function AddTaskDialog() {
   const onSubmit = async (values: z.infer<typeof taskSchema>) => {
     setIsSubmitting(true);
     try {
-      // A placeholder check to prevent Firebase errors if config is not set
-      if (!db.app.options.apiKey || db.app.options.apiKey.startsWith('AIzaSyA')) {
+      if (!db.app.options.apiKey) {
           toast({
             title: "Firebase Not Configured",
             description: "Cannot add task. Please configure Firebase first.",
             variant: "destructive",
           });
+          setIsSubmitting(false);
           return;
       }
 

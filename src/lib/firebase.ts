@@ -10,8 +10,7 @@ const firebaseConfig = {
   projectId: "fir-todo-d8b30",
   storageBucket: "fir-todo-d8b30.firebasestorage.app",
   messagingSenderId: "596832700226",
-  appId: "1:596832700226:web:2b8de2288d0a88c8deeadb",
-  measurementId: "G-HBXHS004BS"
+  appId: "1:596832700226:web:2b8de2288d0a88c8deeadb"
 };
 
 // Initialize Firebase
