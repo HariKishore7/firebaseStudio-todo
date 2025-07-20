@@ -41,18 +41,18 @@ export default function AddTaskDialog() {
   });
 
   const onSubmit = async (values: z.infer<typeof taskSchema>) => {
-    // A placeholder check to prevent Firebase errors if config is not set
-    if (!db.app.options.apiKey || db.app.options.apiKey === 'YOUR_API_KEY') {
-        toast({
-          title: "Firebase Not Configured",
-          description: "Cannot add task. Please configure Firebase first.",
-          variant: "destructive",
-        });
-        return;
-    }
-    
     setIsSubmitting(true);
     try {
+      // A placeholder check to prevent Firebase errors if config is not set
+      if (!db.app.options.apiKey || db.app.options.apiKey.startsWith('AIzaSyA')) {
+          toast({
+            title: "Firebase Not Configured",
+            description: "Cannot add task. Please configure Firebase first.",
+            variant: "destructive",
+          });
+          return;
+      }
+
       await addDoc(collection(db, 'tasks'), {
         ...values,
         completed: false,

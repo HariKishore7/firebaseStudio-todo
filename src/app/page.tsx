@@ -20,7 +20,7 @@ export default function Home() {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (!db.app.options.apiKey || db.app.options.apiKey === 'YOUR_API_KEY') {
+    if (!db.app.options.apiKey || db.app.options.apiKey.startsWith('AIzaSyA')) {
         console.warn("Firebase config is not set. Please update src/lib/firebase.ts");
         setIsLoading(false);
         toast({
