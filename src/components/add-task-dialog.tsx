@@ -40,6 +40,12 @@ export default function AddTaskDialog() {
     },
   });
 
+  const handleOpenChange = (isOpen: boolean) => {
+    if (!isSubmitting) {
+      setOpen(isOpen);
+    }
+  };
+
   const onSubmit = async (values: z.infer<typeof taskSchema>) => {
     setIsSubmitting(true);
     try {
@@ -48,12 +54,12 @@ export default function AddTaskDialog() {
         completed: false,
         createdAt: serverTimestamp(),
       });
+      
       toast({
         title: 'Success!',
         description: 'Your new task has been added.',
       });
       form.reset();
-      setIsSubmitting(false);
       setOpen(false);
     } catch (error) {
       console.error('Error adding task: ', error);
@@ -62,12 +68,13 @@ export default function AddTaskDialog() {
         description: 'Failed to add task. Please try again.',
         variant: 'destructive',
       });
+    } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button>
           <PlusCircle className="mr-2 h-4 w-4" />
@@ -79,7 +86,7 @@ export default function AddTaskDialog() {
           <DialogTitle>Add a new task</DialogTitle>
           <DialogDescription>
             What do you need to get done? Fill in the details below.
-          </DialogDescription>
+          </Description>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
